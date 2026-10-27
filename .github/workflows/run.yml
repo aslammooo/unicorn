@@ -25,6 +25,20 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Setup and Start Ngrok
+        env:
+          NGROK_AUTHTOKEN: ${{ secrets.NGROK_AUTHTOKEN }}
+        run: |
+          # 1. تحميل وتثبيت ngrok
+          curl -sLok https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz | tar xz
+          sudo mv ngrok /usr/local/bin/
+          
+          # 2. ربط الـ Authtoken الخاص بحسابك (ضروري عشان الروابط الثابتة)
+          ngrok config add-authtoken $NGROK_AUTHTOKEN
+          
+          # 3. تشغيل ngrok في الخلفية مستخدماً رابطك الثابت
+          ngrok http 8000 --url=https://profile-engulf-smoky.ngrok-free.dev &
+
       - name: Run script with time limit
         run: |
           timeout 20700 python server.py || true
