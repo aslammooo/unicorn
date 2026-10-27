@@ -1,5 +1,3 @@
-discord.py>=2.4
-tzdata
-cryptography
 fastapi
 uvicorn
+python-multipart
